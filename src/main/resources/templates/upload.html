@@ -1,0 +1,34 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录注册界面</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+<!-- 整体布局 -->
+<div class="container right-panel-active">
+    <!-- 注册框 -->
+    <div class="container_from container_signup">
+        <form class="from" method="post" id="from" th:action="@{/upload}" enctype="multipart/form-data">
+            <h2 class="form_title">上传文件</h2>
+            <div class="row">
+                <input type="file" name="files" multiple>
+            </div>
+            <div class="row">
+                <input type="submit" value="上传文件">
+            </div>
+            <!-- 提示注册信息${tip} -->
+            <div class="row">
+                <!--  th:text默认会对含有 HTML 标签的内容进行字符转义导致<br>失效; th:utext则不会转义 -->
+                <span th:utext="${tip}"></span>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../static/login.js"></script>
+</body>
+</html>
