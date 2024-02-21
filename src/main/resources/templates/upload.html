@@ -4,17 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>登录注册界面</title>
+    <title>文件管理</title>
     <link rel="stylesheet" href="../static/style.css">
 </head>
 
 <body>
+<style>
+    body {
+      background: url('https://pic.3gbizhi.com/uploadmark/20240104/bc17072f7f153a41078db624a64bc78a.jpg') no-repeat;
+      background-size: cover;
+    }
+</style>
+
 <!-- 整体布局 -->
 <div class="container right-panel-active">
     <!-- 注册框 -->
     <div class="container_from container_signup">
+        <h2 class="form_title">文件管理</h2>
+        <form class="from" method="get" th:action="@{/files}">
+            <div class="row">
+                <input type="submit" value="查看文件">
+            </div>
+        </form>
         <form class="from" method="post" id="from" th:action="@{/upload}" enctype="multipart/form-data">
-            <h2 class="form_title">上传文件</h2>
+            <h2 class="form_title">文件上传</h2>
             <div class="row">
                 <input type="file" name="files" multiple>
             </div>
