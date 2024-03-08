@@ -20,12 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class StorageServiceImpl extends HttpServlet implements StorageService  {
-    // 成员变量path，通过@Value注入配置文件中的file.upload.path属性
-    // 这个配置用来定义文件上传后要保存的目录位置
     @Value("${file.upload.path}")
     private String path;
 
@@ -33,14 +32,14 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
     StorageDirConfig storageDirConfig;
 
     @Override
-    public String upload(MultipartFile[] files) {
+    public String upload(MultipartFile[] files, String savePath) {
 
         StringBuffer message = new StringBuffer();
 
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
             try {
-                Path pathToSave = getTargetLocation(fileName);
+                Path pathToSave = getTargetLocation(fileName, savePath);
                 log.info("get pathToSave: {}", pathToSave);
 
                 File destFile = new File(String.valueOf(pathToSave));
@@ -56,7 +55,7 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
         return  message.toString();
     }
 
-    private Path getTargetLocation(String filename) {
+    private Path getTargetLocation(String filename, String savePath) {
         int dotIndex = filename.lastIndexOf('.');
 
         if (dotIndex == -1 || dotIndex >= filename.length() - 2) {
@@ -79,6 +78,10 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
                 dir = StorageDirConfig.DIR.DOCS.toString().toLowerCase();
                 break;
         }
+        if (savePath != null && !savePath.isEmpty()) {
+            dir = dir + "/" + savePath;
+        }
+
         File dirPath = new File(path + dir);
         if (!dirPath.exists()) {
             dirPath.mkdirs();
@@ -89,25 +92,19 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
     }
 
     @Override
-    public List<String> getFiles(Enum dirType) {
-        List<String> fileList = new ArrayList<>();
-
-        // 创建File对象并指定路径
-        String dir = dirType.toString().toLowerCase();
+    public List<String> getFiles(String dir, List<String> fileList) {
         File directory = new File(path + dir);
 
         if (directory.exists() && directory.isDirectory()) {
             // 获取该目录下所有文件及子目录
             File[] files = directory.listFiles();
-            log.info("{}", files.toString());
             for (File file : files) {
-                // 输出文件名或者目录名
-                fileList.add(dir + "/" + file.getName());
-
                 // 如果是目录则递归调用getFiles方法进行深度优先搜索
-                // if (file.isDirectory()) {
-                //     fileList.append(getFiles(file.getAbsolutePath(), model));
-                // }
+                if (file.isDirectory()) {
+                    getFiles(file.getAbsolutePath().replace(path, "").replace("\\", "/"), fileList).toString();
+                } else {
+                    fileList.add(dir + "/" + file.getName());
+                }
             }
         } else {
             return fileList;
@@ -116,7 +113,6 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
         log.info("fileList:{}", fileList);
         return fileList;
     }
-
 
     public String printDirectoryStructure(File dir) {
         StringBuilder sb = new StringBuilder();

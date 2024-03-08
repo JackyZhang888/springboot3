@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StorageService {
-    String upload(MultipartFile[] files);
-    List<String> getFiles(Enum dirType);
+    String upload(MultipartFile[] files, String savePath);
+    List<String> getFiles(String dir, List<String> fileList);
     String printDirectoryStructure(File dir);
 
 }

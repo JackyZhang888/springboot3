@@ -26,17 +26,21 @@
                 <input type="submit" value="查看文件">
             </div>
         </form>
-        <form class="from" method="post" id="from" th:action="@{/upload}" enctype="multipart/form-data">
+        <form class="from" method="post" id="upload-form" th:action="@{/upload}" enctype="multipart/form-data">
             <h2 class="form_title">文件上传</h2>
+            <div class="row">
+                <label for="save-path">设置文件夹：</label>
+                <br>
+                <input type="text" name="savePath" id="save-path" placeholder="如果未填写，文件将保存在根路径下">
+            </div>
             <div class="row">
                 <input type="file" name="files" multiple>
             </div>
             <div class="row">
                 <input type="submit" value="上传文件">
             </div>
-            <!-- 提示注册信息${tip} -->
+            <!-- 提示信息 -->
             <div class="row">
-                <!--  th:text默认会对含有 HTML 标签的内容进行字符转义导致<br>失效; th:utext则不会转义 -->
                 <span th:utext="${tip}"></span>
             </div>
         </form>

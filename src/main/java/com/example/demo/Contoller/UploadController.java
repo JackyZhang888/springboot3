@@ -41,9 +41,9 @@ public class UploadController {
     @PostMapping("/upload")
     //@ResponseBody
     // MultipartFile使用数组，参数名称files对应html页面中input的name，一定要对应
-    public String upload(@RequestPart MultipartFile[] files, Model model) throws IOException {
+    public String upload(@RequestParam("savePath") String savePath, @RequestPart MultipartFile[] files, Model model) throws IOException {
         log.info("upload start");
-        String message = storageService.upload(files);
+        String message = storageService.upload(files, savePath);
         log.info("upload send");
         model.addAttribute("tip", message);
         return "upload";
@@ -52,7 +52,8 @@ public class UploadController {
     @GetMapping("/images")
     public String getImages(Model model) {
         log.info("get images start");
-        List<String> imageList = storageService.getFiles(StorageDirConfig.DIR.IMAGES);
+        List<String> fileList = new ArrayList<>();
+        List<String> imageList = storageService.getFiles(StorageDirConfig.DIR.IMAGES.toString().toLowerCase(), fileList);
         log.info("get images end");
 
         model.addAttribute("imageList", imageList);
@@ -62,7 +63,8 @@ public class UploadController {
     @GetMapping("/videos")
     public String getVideos(Model model) {
         log.info("get videos start");
-        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.VIDEOS);
+        List<String> fileList = new ArrayList<>();
+        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.VIDEOS.toString().toLowerCase(), fileList);
         log.info("get videos end");
         model.addAttribute("videoList", videoList);
         return "file-list";
@@ -71,7 +73,8 @@ public class UploadController {
     @GetMapping("/docs")
     public String getDocs(Model model) {
         log.info("get docs start");
-        List<String> docsList = storageService.getFiles(StorageDirConfig.DIR.DOCS);
+        List<String> fileList = new ArrayList<>();
+        List<String> docsList = storageService.getFiles(StorageDirConfig.DIR.DOCS.toString().toLowerCase(), fileList);
         log.info("get docs end");
         model.addAttribute("docList", docsList);
         return "file-list";
