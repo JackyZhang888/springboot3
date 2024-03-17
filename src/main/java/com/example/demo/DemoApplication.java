@@ -9,6 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 
 
 @Slf4j
+@EnableAsync
 @SpringBootApplication
 @MapperScan(value = {"com.example.demo.Dao"})
 public class DemoApplication implements CommandLineRunner {

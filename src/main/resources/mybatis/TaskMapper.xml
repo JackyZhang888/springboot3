@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper标签要指定namespace属性，和实际的mapper文件一致-->
+<mapper namespace="com.example.demo.Dao.TaskMapper">
+    <select id="createTask">
+        INSERT INTO task (taskId, taskType, createTime, progress, status) VALUES
+        (#{task.taskId}, #{task.taskType}, #{task.createTime}, #{task.progress}, #{task.status});
+    </select>
+    <select id="updateTask">
+        UPDATE task SET updateTime = #{task.updateTime}, progress = #{task.progress}, status = #{task.status}
+        WHERE taskId = #{task.taskId} and taskType = #{task.taskType};
+    </select>
+</mapper>

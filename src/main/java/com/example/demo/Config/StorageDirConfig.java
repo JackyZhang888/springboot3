@@ -10,6 +10,7 @@ public class StorageDirConfig {
     public enum DIR  {
         IMAGES ,
         VIDEOS,
-        DOCS
+        MOVIES,
+        DOCUMENTS
     }
 }
