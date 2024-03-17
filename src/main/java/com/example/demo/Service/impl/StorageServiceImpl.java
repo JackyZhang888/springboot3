@@ -38,6 +38,9 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
     @Value("${file.upload.path}")
     private String path;
 
+    @Value("${logging.file.dir}")
+    private String logDir;
+
     @Autowired
     StorageDirConfig storageDirConfig;
 
@@ -131,8 +134,8 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
 
     @Override
     public List<String> getFiles(String dir, List<String> fileList) {
-        File directory = new File(path + dir);
-
+        String dirPath = path + dir;
+        File directory = new File(dirPath);
         if (directory.exists() && directory.isDirectory()) {
             // 获取该目录下所有文件及子目录
             File[] files = directory.listFiles();

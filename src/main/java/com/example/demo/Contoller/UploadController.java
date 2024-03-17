@@ -13,13 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 文件上传控制器
@@ -28,7 +29,8 @@ import java.util.stream.Stream;
 @Slf4j
 public class UploadController {
 
-    private static final String DOCUMENTS = StorageDirConfig.DIR.DOCUMENTS.toString().toLowerCase();
+    @Value("${logging.file.name}")
+    private String logName;
 
     @Autowired
     private StorageService storageService; // 依赖注入文件存储服务
@@ -60,14 +62,16 @@ public class UploadController {
         }
 
         return true;
-    };
+    }
+
+    ;
 
     /**
      * 处理文件上传请求，将文件保存到指定路径
      *
      * @param savePath 保存路径
-     * @param files 要上传的文件数组
-     * @param model 模型，用于在前后台间传递数据
+     * @param files    要上传的文件数组
+     * @param model    模型，用于在前后台间传递数据
      * @return 返回页面名称
      * @throws IOException 文件操作异常
      */
@@ -131,20 +135,27 @@ public class UploadController {
     }
 
     /**
-     * 获取文档文件列表
+     * 获取日志文件列表
      *
      * @param model 模型，用于在前后台间传递数据
      * @return 返回页面名称
      */
-    @GetMapping("/documents")
-    public String getDocs(Model model) {
-        log.info("get docs start");
-        List<String> fileList = new ArrayList<>();
-        List<String> docsList = storageService.getFiles(StorageDirConfig.DIR.DOCUMENTS.toString().toLowerCase(), fileList);
-        log.info("get docs end");
-        model.addAttribute("docList", docsList);
-        return "file-list";
+    @GetMapping("/logs")
+    public String getLogs(Model model) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
+            StringBuilder content = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            model.addAttribute("logs", content.toString());
+            return "log";
+        } catch (IOException e) {
+            // 处理异常
+            throw new RuntimeException("Failed to read the log file", e);
+        }
     }
+
 
     /**
      * 获取所有文件列表

@@ -13,4 +13,7 @@
         UPDATE task SET updateTime = #{task.updateTime}, progress = #{task.progress}, status = #{task.status}
         WHERE taskId = #{task.taskId} and taskType = #{task.taskType};
     </select>
+    <select id="getTasks">
+        select * from task order by createTime desc limit 10;
+    </select>
 </mapper>

@@ -44,6 +44,31 @@
                 <span th:utext="${tip}"></span>
             </div>
         </form>
+        <form class="from" method="get" th:action="@{/tasks}">
+            <div class="row">
+                <input type="submit" value="查看结果">
+            </div>
+            <!-- 提示信息 -->
+            <div class="row">
+                <table>
+                    <tr>
+                        <th>Progress</th>
+                        <th>Status</th>
+                        <th>Create Time</th>
+                    </tr>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.progress}"></td>
+                        <td th:text="${task.status}"></td>
+                        <td th:text="${task.createTime}"></td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+        <form class="from" method="get" th:action="@{/logs}">
+            <div class="row">
+                <input type="submit" value="查看日志">
+            </div>
+        </form>
     </div>
 </div>
 <script src="../static/login.js"></script>

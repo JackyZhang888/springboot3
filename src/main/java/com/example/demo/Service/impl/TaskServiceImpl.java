@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -53,5 +54,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Task task) {
         System.out.println("deleteTask");
+    }
+
+    @Override
+    public List<Task> getTasks() {
+        return taskMapper.getTasks();
     }
 }
