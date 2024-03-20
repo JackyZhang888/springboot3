@@ -142,16 +142,26 @@ public class UploadController {
      */
     @GetMapping("/logs")
     public String getLogs(Model model) {
+        ArrayList<String> lastLines = new ArrayList<>(100);
         try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
-            StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
+                if (lastLines.size() == 100) {
+                    // 如果列表已满，则移除最旧的一行（即第一个元素）
+                    lastLines.remove(0);
+                }
+                // 添加当前行到列表末尾
+                lastLines.add(line);
             }
+
+            StringBuilder content = new StringBuilder();
+            for (String lastLine : lastLines) {
+                content.append(lastLine).append("\n");
+            }
+
             model.addAttribute("logs", content.toString());
             return "log";
         } catch (IOException e) {
-            // 处理异常
             throw new RuntimeException("Failed to read the log file", e);
         }
     }

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>文件管理</title>
-    <link rel="stylesheet" href="../static/style.css">
 </head>
 
 <body>
@@ -29,8 +28,12 @@
         <form class="from" method="post" id="upload-form" th:action="@{/upload}" enctype="multipart/form-data">
             <h2 class="form_title">文件上传</h2>
             <div class="row">
-                <label for="save-path">设置文件夹：</label>
+                <label for="save-path">选择文件夹：</label>
                 <br>
+                <div id="color-options">
+                    <button onclick="setSavePath('west')">west</button>
+                    <button onclick="setSavePath('Korea')">korea</button>
+                </div>
                 <input type="text" name="savePath" id="save-path" placeholder="可选，默认保存在根路径下">
             </div>
             <div class="row">
@@ -44,6 +47,15 @@
                 <span th:utext="${tip}"></span>
             </div>
         </form>
+        <script>function setSavePath(setValue) {
+                // 阻止按钮的默认行为（例如表单提交）
+                event.preventDefault();
+                // 获取输入框元素
+                var savePathInput = document.getElementById("save-path");
+                // 将传递进来的颜色值赋给输入框的value属性
+                savePathInput.value = setValue;
+                }
+        </script>
         <form class="from" method="get" th:action="@{/tasks}">
             <div class="row">
                 <input type="submit" value="查看结果">
@@ -71,6 +83,5 @@
         </form>
     </div>
 </div>
-<script src="../static/login.js"></script>
 </body>
 </html>
