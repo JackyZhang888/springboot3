@@ -19,6 +19,13 @@ public class TaskController {
     @GetMapping("/tasks")
     public String getTasks(Model model) {
         List<Task> tasks = taskService.getTasks();
+
+        Task initialTask = new Task();
+        initialTask.setProgress("Progress");
+        initialTask.setStatus("Status");
+        initialTask.setCreateTime("Create Time");
+        tasks.add(0, initialTask);
+
         model.addAttribute("tasks", tasks);
         return "upload";
     }

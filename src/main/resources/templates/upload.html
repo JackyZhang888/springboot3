@@ -1,87 +1,87 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>文件管理</title>
+    <link rel="stylesheet" href="../static/upload.css">
 </head>
-
 <body>
-<style>
-    body {
-      background: url('https://pic.3gbizhi.com/uploadmark/20240104/bc17072f7f153a41078db624a64bc78a.jpg') no-repeat;
-      background-size: cover;
-    }
-</style>
-
-<!-- 整体布局 -->
 <div class="container right-panel-active">
-    <!-- 注册框 -->
-    <div class="container_from container_signup">
-        <h2 class="form_title">文件管理</h2>
-        <form class="from" method="get" th:action="@{/directoryStructure}">
-            <div class="row">
-                <input type="submit" value="查看文件">
-            </div>
-        </form>
-        <form class="from" method="post" id="upload-form" th:action="@{/upload}" enctype="multipart/form-data">
+    <!-- 文件管理标题 -->
+    <h2 class="form_title">文件管理</h2>
+
+    <!-- 查看文件表单 -->
+    <form class="from" method="get" th:action="@{/directoryStructure}">
+        <div class="form-row">
+            <input type="submit" value="查看文件">
+        </div>
+    </form>
+    <div class="buttons-container">
+        <!-- 文件上传表单 -->
+        <form class="form-row" method="post" id="upload-form" th:action="@{/upload}" enctype="multipart/form-data">
             <h2 class="form_title">文件上传</h2>
+            <!-- 文件夹选择部分 -->
             <div class="row">
                 <label for="save-path">选择文件夹：</label>
                 <br>
                 <div id="color-options">
-                    <button onclick="setSavePath('west')">west</button>
-                    <button onclick="setSavePath('Korea')">korea</button>
+                    <button onclick="setSavePath('West')">West</button>
+                    <button onclick="setSavePath('Korea')">Korea</button>
+                    <button onclick="setSavePath('Japan')">Japan</button>
+                    <button onclick="setSavePath('China')">China</button>
+                    <button onclick="setSavePath('screenshot')">screenshot</button>
+                    <br>
+                    <button onclick="setSavePath('gif')">gif</button>
+                    <button onclick="setSavePath('playboy')">playboy</button>
+                    <button onclick="setSavePath('comics')">comics</button>
+                    <button onclick="setSavePath('selfie')">selfie</button>
                 </div>
                 <input type="text" name="savePath" id="save-path" placeholder="可选，默认保存在根路径下">
             </div>
-            <div class="row">
+            <!-- 上传文件部分-->
+            <div class="form-row inline-buttons">
                 <input type="file" name="files" multiple>
             </div>
-            <div class="row">
+            <br/>
+            <br/>
+            <div class="form-row ">
                 <input type="submit" value="上传文件">
             </div>
-            <!-- 提示信息 -->
-            <div class="row">
+
+            <!-- 上传文件提示信息 -->
+            <div class="form-row tip-row">
                 <span th:utext="${tip}"></span>
             </div>
         </form>
-        <script>function setSavePath(setValue) {
-                // 阻止按钮的默认行为（例如表单提交）
-                event.preventDefault();
-                // 获取输入框元素
-                var savePathInput = document.getElementById("save-path");
-                // 将传递进来的颜色值赋给输入框的value属性
-                savePathInput.value = setValue;
-                }
-        </script>
-        <form class="from" method="get" th:action="@{/tasks}">
-            <div class="row">
+        <br/>
+        <!-- 查看结果表单与表格 -->
+        <form class="inline-buttons" method="get" th:action="@{/tasks}">
+            <div class="form-row inline-buttons">
                 <input type="submit" value="查看结果">
             </div>
-            <!-- 提示信息 -->
-            <div class="row">
-                <table>
-                    <tr>
-                        <th>Progress</th>
-                        <th>Status</th>
-                        <th>Create Time</th>
-                    </tr>
-                    <tr th:each="task : ${tasks}">
-                        <td th:text="${task.progress}"></td>
-                        <td th:text="${task.status}"></td>
-                        <td th:text="${task.createTime}"></td>
-                    </tr>
-                </table>
-            </div>
         </form>
-        <form class="from" method="get" th:action="@{/logs}">
-            <div class="row">
+        <!-- 查看日志 -->
+        <form class="inline-buttons" method="get" th:action="@{/logs}">
+            <div class="form-row inline-buttons">
                 <input type="submit" value="查看日志">
             </div>
         </form>
     </div>
+
+    <!-- 显示上传结果 -->
+    <div class="row">
+        <table>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.progress}"></td>
+                <td th:text="${task.status}"></td>
+                <td th:text="${task.createTime}"></td>
+            </tr>
+        </table>
+    </div>
+    <!-- 引入外部脚本文件 -->
+    <script src="../static/scripts.js"></script>
 </div>
 </body>
 </html>

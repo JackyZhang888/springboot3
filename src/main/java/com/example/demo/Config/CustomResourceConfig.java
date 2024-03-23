@@ -25,5 +25,8 @@ public class CustomResourceConfig implements WebMvcConfigurer {
         // 将所有请求映射到指定的文件路径上
         registry.addResourceHandler("/**/**")
                 .addResourceLocations("file:" + path);
+
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 }

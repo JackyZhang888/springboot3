@@ -92,49 +92,6 @@ public class UploadController {
     }
 
     /**
-     * 获取图片文件列表
-     *
-     * @param model 模型，用于在前后台间传递数据
-     * @return 返回页面名称
-     */
-    @GetMapping("/images")
-    public String getImages(Model model) {
-        log.info("get images start");
-        List<String> fileList = new ArrayList<>();
-        List<String> imageList = storageService.getFiles(StorageDirConfig.DIR.IMAGES.toString().toLowerCase(), fileList);
-        log.info("get images end");
-
-        model.addAttribute("imageList", imageList);
-        return "file-list";
-    }
-
-    /**
-     * 获取视频文件列表
-     *
-     * @param model 模型，用于在前后台间传递数据
-     * @return 返回页面名称
-     */
-    @GetMapping("/videos")
-    public String getVideos(Model model) {
-        log.info("get videos start");
-        List<String> fileList = new ArrayList<>();
-        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.VIDEOS.toString().toLowerCase(), fileList);
-        log.info("get videos end");
-        model.addAttribute("videoList", videoList);
-        return "file-list";
-    }
-
-    @GetMapping("/movies")
-    public String getMovies(Model model) {
-        log.info("get videos start");
-        List<String> fileList = new ArrayList<>();
-        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.MOVIES.toString().toLowerCase(), fileList);
-        log.info("get videos end");
-        model.addAttribute("videoList", videoList);
-        return "file-list";
-    }
-
-    /**
      * 获取日志文件列表
      *
      * @param model 模型，用于在前后台间传递数据
@@ -146,7 +103,7 @@ public class UploadController {
         try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (lastLines.size() == 100) {
+                if (lastLines.size() == 20) {
                     // 如果列表已满，则移除最旧的一行（即第一个元素）
                     lastLines.remove(0);
                 }

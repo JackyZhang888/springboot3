@@ -107,6 +107,7 @@ public class StorageServiceImpl extends HttpServlet implements StorageService  {
             case "jpg":
             case "jpeg":
             case "png":
+            case "gif":
                 dir = StorageDirConfig.DIR.IMAGES.toString().toLowerCase();
                 break;
             case "mov":
