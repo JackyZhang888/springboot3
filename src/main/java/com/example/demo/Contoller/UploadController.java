@@ -1,6 +1,5 @@
 package com.example.demo.Contoller;
 
-import com.example.demo.Config.StorageDirConfig;
 import com.example.demo.Service.StorageService;
 import com.example.demo.Service.TaskService;
 
@@ -17,9 +16,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -51,21 +47,6 @@ public class UploadController {
         return "upload";
     }
 
-
-    private boolean fileExist(MultipartFile[] files) {
-        if (files == null || files.length == 0) {
-            return false;
-        }
-
-        if (files.length == 1 && files[0].getOriginalFilename().equals("")) {
-            return false;
-        }
-
-        return true;
-    }
-
-    ;
-
     /**
      * 处理文件上传请求，将文件保存到指定路径
      *
@@ -90,39 +71,6 @@ public class UploadController {
         model.addAttribute("tip", "异步任务后台执行成功.");
         return "upload";
     }
-
-    /**
-     * 获取日志文件列表
-     *
-     * @param model 模型，用于在前后台间传递数据
-     * @return 返回页面名称
-     */
-    @GetMapping("/logs")
-    public String getLogs(Model model) {
-        ArrayList<String> lastLines = new ArrayList<>(100);
-        try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (lastLines.size() == 20) {
-                    // 如果列表已满，则移除最旧的一行（即第一个元素）
-                    lastLines.remove(0);
-                }
-                // 添加当前行到列表末尾
-                lastLines.add(line);
-            }
-
-            StringBuilder content = new StringBuilder();
-            for (String lastLine : lastLines) {
-                content.append(lastLine).append("\n");
-            }
-
-            model.addAttribute("logs", content.toString());
-            return "log";
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read the log file", e);
-        }
-    }
-
 
     /**
      * 获取所有文件列表
@@ -162,7 +110,51 @@ public class UploadController {
             default:
                 break;
         }
+        model.addAttribute("totalPages", 5);
+        return "page-list";
+    }
 
-        return "file-list";
+    /**
+     * 获取日志文件列表
+     *
+     * @param model 模型，用于在前后台间传递数据
+     * @return 返回页面名称
+     */
+    @GetMapping("/logs")
+    public String getLogs(Model model) {
+        ArrayList<String> lastLines = new ArrayList<>(100);
+        try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (lastLines.size() == 20) {
+                    // 如果列表已满，则移除最旧的一行（即第一个元素）
+                    lastLines.remove(0);
+                }
+                // 添加当前行到列表末尾
+                lastLines.add(line);
+            }
+
+            StringBuilder content = new StringBuilder();
+            for (String lastLine : lastLines) {
+                content.append(lastLine).append("\n");
+            }
+
+            model.addAttribute("logs", content.toString());
+            return "log";
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read the log file", e);
+        }
+    }
+
+    private boolean fileExist(MultipartFile[] files) {
+        if (files == null || files.length == 0) {
+            return false;
+        }
+
+        if (files.length == 1 && files[0].getOriginalFilename().equals("")) {
+            return false;
+        }
+
+        return true;
     }
 }
