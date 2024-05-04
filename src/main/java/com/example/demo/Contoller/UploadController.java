@@ -1,5 +1,6 @@
 package com.example.demo.Contoller;
 
+import com.example.demo.Config.StorageDirConfig;
 import com.example.demo.Service.StorageService;
 import com.example.demo.Service.TaskService;
 
@@ -104,13 +105,24 @@ public class UploadController {
                 model.addAttribute("imageList", fileList);
                 break;
             case "videos":
+                model.addAttribute("videoList", fileList);
+                break;
             case "movies":
                 model.addAttribute("videoList", fileList);
                 break;
             default:
                 break;
         }
-        model.addAttribute("totalPages", 5);
+        return "waterfall-list";
+    }
+
+    @GetMapping("/movies")
+    public String getVideosByPage(Model model, @RequestParam("dir") String listDir) {
+        log.info("get videos start");
+        List<String> fileList = new ArrayList<>();
+        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.VIDEOS.toString().toLowerCase(), fileList);
+        log.info("get videos end");
+        model.addAttribute("videoList", videoList);
         return "page-list";
     }
 
@@ -126,7 +138,7 @@ public class UploadController {
         try (BufferedReader reader = new BufferedReader(new FileReader(logName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (lastLines.size() == 20) {
+                if (lastLines.size() == 200) {
                     // 如果列表已满，则移除最旧的一行（即第一个元素）
                     lastLines.remove(0);
                 }

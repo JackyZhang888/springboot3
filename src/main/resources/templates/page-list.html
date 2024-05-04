@@ -4,57 +4,16 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>CSS3瀑布流效果</title>
+    <title>分页效果</title>
     <link rel="stylesheet" href="../static/listPage.css"></head>
 <body>
 <div class="container">
     <div class="page">
-        <!-- 文件列表内容... -->
-        <div th:each="file : ${imageList}" class="item">
-            <img th:src="${file}" onclick="toggleEnlarge(event)">
-        </div>
-        <div th:each="file : ${videoList}" class="item">
+        <div th:each="video : ${videoList}" class="item">
             <video controls preload="metadata">
-                <source th:src="${file}" type="video/mp4">
+                <source th:src="${video}" type="video/mp4">
             </video>
         </div>
-        <div th:each="file : ${docList}" class="item">
-            <li>
-                <a th:href="@{${file}}">
-                    <span th:text="${file}">file</span>
-                </a>
-            </li>
-        </div>
     </div>
-
-    <!-- 分页组件 -->
-    <div class="pagination">
-        <button class="prev" th:disabled="${page == 0}" onclick="changePage(-1)">上一页</button>
-
-        <!-- 动态生成页码按钮 -->
-        <button th:each="p : ${#numbers.sequence(0, totalPages - 1)}"
-                th:class="${page == p} ? 'active' : ''"
-                th:text="${p + 1}"
-                onclick="changePage(${p})"></button>
-
-        <button class="next" th:disabled="${page == totalPages - 1}" onclick="changePage(1)">下一页</button>
-    </div>
-</div>
-<script src="../static/scripts.js"></script>
-
-<script>
-    let currentPage = /* 在此处设置当前页码，如从模型中获取 */;
-
-    function changePage(direction) {
-        // 更新currentPage，并重新发送AJAX请求获取对应页的数据
-        currentPage += direction;
-        // 示例使用fetch API，实际项目可能使用jQuery.ajax、axios等
-        fetch(`/list?dir=<your-dir>&page=${currentPage}&size=<your-size}`)
-            .then(response => response.text())
-            .then(html => document.querySelector('.waterfall').innerHTML = html)
-            .catch(error => console.error('Error fetching page:', error));
-    }
-</script>
-
 </body>
 </html>
