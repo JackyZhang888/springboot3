@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 
 @Slf4j
-@EnableAsync
+//@EnableAsync
 @SpringBootApplication
 @MapperScan(value = {"com.example.demo.Dao"})
 public class DemoApplication implements CommandLineRunner {
