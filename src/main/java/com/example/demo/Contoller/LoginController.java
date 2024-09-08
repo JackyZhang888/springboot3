@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
 /**
  * 登录控制类，处理用户登录相关的请求
  */
@@ -21,6 +19,8 @@ public class LoginController {
     @Autowired
     UserService userService; // 注入UserService，用于用户信息的查询
 
+    @Autowired
+    ManageController UploadController;
     /**
      * 显示登录页面
      *
@@ -29,6 +29,18 @@ public class LoginController {
     @GetMapping(value = {"/"})
     public String loginPage() {
         return "login";
+    }
+
+    @GetMapping(value = {"goto-movies"})
+    public String portalMovies() {
+        log.info("goto-movies");
+        return "portal-movies";
+    }
+
+    @GetMapping(value = {"goto-manage"})
+    public String portalManage() {
+        log.info("goto-manage");
+        return "manage";
     }
 
     /**
@@ -51,7 +63,7 @@ public class LoginController {
                     session.setAttribute("loginUser", user);
                     log.info("login success! userName:{}, role:{}", user.getUsername(), userCache.getRole());
                     // 重定向到成功页面
-                    return "redirect:/success";
+                    return "redirect:/portal";
                 } else {
                     // 账号或密码错误，返回登录页面并显示错误信息
                     model.addAttribute("msg", "账号或者密码有误!");
@@ -78,13 +90,13 @@ public class LoginController {
      * @param model 用于在视图和控制器之间传递数据
      * @return 根据登录状态返回用户页面或登录页面
      */
-    @GetMapping("success")
+    @GetMapping("portal")
     public String UserPage(HttpSession session, Model model) {
         User loginUser = (User)session.getAttribute("loginUser");
         if (loginUser != null) {
             // 已登录，显示用户页面
             model.addAttribute("user", loginUser.getUsername());
-            return "upload";
+            return "portal-movies";
         } else {
             // 未登录，返回登录页面
             model.addAttribute("msg", "请登录");

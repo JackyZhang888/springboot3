@@ -1,29 +1,20 @@
 package com.example.demo.Service.impl;
 
-import com.example.demo.Bean.Task;
 import com.example.demo.Config.StorageDirConfig;
-import com.example.demo.Service.StorageService;
+import com.example.demo.Service.ManageService;
 import com.example.demo.Service.TaskService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -34,7 +25,7 @@ import java.util.stream.Stream;
  */
 @Service
 @Slf4j
-public class StorageServiceImpl extends HttpServlet implements StorageService  {
+public class ManageServiceImpl extends HttpServlet implements ManageService {
     @Value("${file.upload.path}")
     private String path;
 

@@ -1,7 +1,6 @@
 package com.example.demo.Contoller;
 
-import com.example.demo.Config.StorageDirConfig;
-import com.example.demo.Service.StorageService;
+import com.example.demo.Service.ManageService;
 import com.example.demo.Service.TaskService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +23,13 @@ import java.util.*;
  */
 @Controller
 @Slf4j
-public class UploadController {
+public class ManageController {
 
     @Value("${logging.file.name}")
     private String logName;
 
     @Autowired
-    private StorageService storageService; // 依赖注入文件存储服务
+    private ManageService storageService; // 依赖注入文件存储服务
 
     @Autowired
     private TaskService taskService;
@@ -38,15 +37,6 @@ public class UploadController {
     @Value("${file.upload.path}")
     private String path; // 从配置文件中读取文件上传路径
 
-    /**
-     * 显示文件上传页面
-     *
-     * @return 返回页面名称
-     */
-    @GetMapping("/upload")
-    public String uploadPage() {
-        return "upload";
-    }
 
     /**
      * 处理文件上传请求，将文件保存到指定路径
@@ -63,14 +53,14 @@ public class UploadController {
         if (!fileExist(files)) {
             model.addAttribute("tip", "请选择文件.");
             log.warn("upload failed. No file selected.");
-            return "upload";
+            return "manage";
         }
 
         String taskId = UUID.randomUUID().toString();
         taskService.createTask(taskId, "upload");
         storageService.upload(files, savePath, taskId);
         model.addAttribute("tip", "异步任务后台执行成功.");
-        return "upload";
+        return "manage";
     }
 
     /**
@@ -98,32 +88,19 @@ public class UploadController {
         List<String> fileList = storageService.getFiles(listDir ,list);
         log.info("get list end");
         switch (listType) {
-            case "documents":
-                model.addAttribute("docList", fileList);
-                break;
             case "images":
                 model.addAttribute("imageList", fileList);
-                break;
+                return "portal-photos";
             case "videos":
                 model.addAttribute("videoList", fileList);
-                break;
+                return "portal-videos";
             case "movies":
                 model.addAttribute("videoList", fileList);
-                break;
+                return "portal-movies";
             default:
                 break;
         }
-        return "waterfall-list";
-    }
-
-    @GetMapping("/movies")
-    public String getVideosByPage(Model model, @RequestParam("dir") String listDir) {
-        log.info("get videos start");
-        List<String> fileList = new ArrayList<>();
-        List<String> videoList = storageService.getFiles(StorageDirConfig.DIR.VIDEOS.toString().toLowerCase(), fileList);
-        log.info("get videos end");
-        model.addAttribute("videoList", videoList);
-        return "page-list";
+        return "";
     }
 
     /**

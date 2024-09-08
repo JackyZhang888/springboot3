@@ -27,6 +27,6 @@ public class TaskController {
         tasks.add(0, initialTask);
 
         model.addAttribute("tasks", tasks);
-        return "upload";
+        return "manage";
     }
 }
